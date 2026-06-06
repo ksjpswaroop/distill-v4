@@ -8,15 +8,14 @@
 
 ## Table of Contents
 
-1. [Architecture](#architecture)
-2. [Training Pipeline](#training-pipeline)
-3. [Quick Start](#quick-start)
-4. [Project Structure](#project-structure)
-5. [Training Phases](#training-phases)
-6. [Gate Details](#gate-details)
-7. [Hardware Requirements](#hardware-requirements)
-8. [Configuration Reference](#configuration-reference)
-9. [FAQ](#faq)
+1. [Architecture](docs/ARCHITECTURE.md)
+2. [Training Pipeline](docs/DISTILLATION_PIPELINE.md)
+3. [Gate Architecture](docs/GATES.md)
+4. [Inference Pipeline](docs/INFERENCE.md)
+5. [Seed Model Selection](docs/SEED_MODEL_SELECTION.md)
+6. [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md)
+7. [Prior Art](docs/PRIOR-ART.md)
+8. [Related Work Comparison](docs/RELATED_WORK_COMPARISON.md)
 
 ---
 
