@@ -1,0 +1,60 @@
+# ============================================================
+# Base Training Config — all gates share these defaults
+# ============================================================
+# Override per-gate as needed
+
+# Model
+model:
+  name: "Qwen/Qwen2.5-Coder-7B-Instruct"
+  hidden_dim: 4096
+  seq_length: 8192
+  flash_attn: true
+
+# Data
+data:
+  train_path: "./data/splits/train.jsonl"
+  eval_path: "./data/splits/eval.jsonl"
+  batch_size: 2          # per GPU
+  num_workers: 4
+  prefetch_factor: 2
+  max_seq_length: 8192
+
+# Training
+training:
+  num_epochs: 3
+  learning_rate: 1e-4
+  min_lr_ratio: 0.1
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  gradient_clip: 1.0
+  bf16: true
+  tf32: true
+
+# Optimizer
+optimizer:
+  type: "AdamW"
+  beta1: 0.9
+  beta2: 0.999
+  eps: 1e-8
+
+# Scheduler
+scheduler:
+  type: "cosine"
+
+# DeepSpeed
+deepspeed:
+  config_path: "./configs/deepspeed_zero2.json"
+
+# Logging
+logging:
+  wandb_project: "distill-v4"
+  wandb_run_name: null
+  log_interval: 10
+  eval_interval: 500
+  save_interval: 2000
+  save_dir: "./checkpoints"
+
+# Hardware
+hardware:
+  num_gpus: 8
+  gpu_type: "a100-80gb"

@@ -1,0 +1,43 @@
+# Gate 3: RL (GRPO) Training Config
+# 1B params, 4x A100
+
+model:
+  hidden_dim: 4096
+
+training:
+  num_epochs: 3
+  learning_rate: 1e-4
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+
+  # GRPO-specific
+  num_generations: 8       # Group size for GRPO
+  kl_coef: 0.04            # KL divergence coefficient
+  clip_epsilon: 0.2        # PPO clipping epsilon
+  gamma: 1.0               # Discount factor
+  lam: 0.95                # GAE lambda
+  entropy_coef: 0.01        # Entropy bonus for exploration
+
+# Reward weights
+reward:
+  correctness_weight: 1.0
+  efficiency_weight: 0.2
+  test_pass_rate_weight: 0.5
+  hallucination_penalty: -0.5
+
+data:
+  rl_dataset_path: "./data/splits/rl_train.jsonl"
+  reward_signal_path: "./data/rl/reward_signals.jsonl"
+
+loss:
+  policy_loss_weight: 1.0
+  value_loss_weight: 0.5
+  entropy_loss_weight: 0.01
+
+deepspeed:
+  config_path: "./configs/deepspeed_zero2.json"
+  stage: 2
+
+hardware:
+  num_gpus: 4
+  max_batch_size_per_gpu: 8

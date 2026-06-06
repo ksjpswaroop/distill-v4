@@ -1,0 +1,37 @@
+# Gate 4: Verification Training Config
+# 3B params, 4x A100
+
+model:
+  hidden_dim: 4096
+  block_size: 64
+  max_execution_time: 5.0   # seconds
+
+training:
+  num_epochs: 2
+  learning_rate: 5e-5
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  gradient_clip: 1.0
+
+  # Verification-specific
+  rejection_threshold: 0.3    # P(accept) threshold
+  wrong_answer_ratio: 0.3     # Fraction of wrong examples in training
+
+data:
+  verification_dataset_path: "./data/splits/verification_train.jsonl"
+  code_execution_timeout: 5.0
+
+# Loss weights
+loss:
+  code_execution_loss_weight: 1.0
+  rejection_loss_weight: 0.8
+  hallucination_loss_weight: 0.5
+  consistency_loss_weight: 0.3
+
+deepspeed:
+  config_path: "./configs/deepspeed_zero2.json"
+  stage: 2
+
+hardware:
+  num_gpus: 4
+  max_batch_size_per_gpu: 4

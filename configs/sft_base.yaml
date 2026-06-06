@@ -1,0 +1,33 @@
+# SFT Base Model Training Config
+model:
+  name: "Qwen/Qwen2.5-Coder-7B-Instruct"
+  seq_length: 8192
+  flash_attn: true
+
+training:
+  num_epochs: 3
+  learning_rate: 1e-5
+  min_lr_ratio: 0.1
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  gradient_clip: 1.0
+  bf16: true
+
+data:
+  batch_size: 8          # per GPU
+  num_workers: 4
+  max_seq_length: 8192
+
+deepspeed:
+  config_path: "./configs/deepspeed_zero2.json"
+
+logging:
+  wandb_project: "distill-v4"
+  wandb_run_name: "sft-base-qwen-7b"
+  log_interval: 10
+  eval_interval: 500
+  save_interval: 1000
+  save_dir: "./checkpoints/sft_base"
+
+hardware:
+  num_gpus: 8

@@ -1,42 +1,52 @@
-# Distill-V4 Requirements
+# Core ML
+torch==2.3.1
+torchvision==0.18.1
+torchaudio==2.3.1
 
-# Core
-torch>=2.1.0
-transformers>=4.40.0
-huggingface_hub>=0.21.0
-accelerate>=0.28.0
-safetensors>=0.4.0
+# CUDA packages
+nvidia-cuda-toolkit==12.1.0
+nvidia-cudnn==8.9.7.0
+nvidia-nccl==2.20.5
+
+# Distributed training
+deepspeed==0.14.0
+accelerate==0.32.0
+transformers==4.42.0
+peft==0.12.0
+trl==0.9.6
 
 # Data processing
-datasets>=2.18.0
-pandas>=2.2.0
-numpy>=1.26.0
-pyyaml>=6.0
+numpy==1.26.4
+scipy==1.13.1
+pandas==2.2.2
+pyarrow==16.1.0
+fastparquet==2024.5.0
 
-# Fine-tuning
-peft>=0.10.0  # LoRA support
-trl>=0.8.0   # RLHF/PPO support
+# Model loading
+huggingface-hub==0.23.4
+safetensors==0.4.4
+bitsandbytes==0.43.3
+flash-attn==2.6.3
+einops==0.8.0
+sentencepiece==0.2.0
+tiktoken==0.7.0
 
-# Code execution/sandboxing
-docker>=7.0.0  # For code execution sandbox
-gvisor>=2024.0.0  # Alternative sandbox
+# Vector search
+faiss-cpu==1.8.0
+faiss-gpu==1.8.0
 
-# Evaluation
-scikit-learn>=1.4.0
-tqdm>=4.66.0
-
-# Formal verification (optional)
-lean-dojo>=4.0.0  # Lean theorem prover interface
-coq-of-ocaml>=0.8.0  # Coq proof checker
-
-# Memory/retrieval
-faiss-cpu>=1.8.0  # Fast similarity search
-langdetect>=1.0.9  # Language detection
+# Formal verification
+z3-solver==4.13.0
+sympy==1.13.1
 
 # Logging
-wandb>=0.17.0  # Experiment tracking
-tensorboard>=2.16.0
+wandb==0.17.2
+tensorboard==2.16.2
 
 # Utilities
-python-dotenv>=1.0.0
-requests>=2.31.0
+tqdm==4.66.4
+pyyaml==6.0.1
+omegaconf==2.3.0
+requests==2.32.3
+aiohttp==3.9.5
+protobuf==4.25.3

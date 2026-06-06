@@ -1,0 +1,66 @@
+# ============================================================
+# Distill-V4 — DGX Spark Deployment
+# ============================================================
+# Build:   docker build -t distill-v4:latest -f Dockerfile.spark .
+# Run:     docker run --gpus all --ipc=host --network=host \
+#            -v $PWD:/workspace -w /workspace distill-v4:latest \
+#            bash scripts/train_full_model.sh
+# ============================================================
+
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+ENV TORCH_CUDA_ARCH_LIST="8.0;8.6;8.9;9.0"
+
+# Install system deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    curl \
+    wget \
+    vim \
+    zlib1g-dev \
+    libffi-dev \
+    libssl-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libncurses5-dev \
+    libgdbm-dev \
+    libnuma-dev \
+    libreadline-dev \
+    tk-dev \
+    ca-certificates \
+    jq \
+    time \
+    htop \
+    strace \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Conda
+RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    -o /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p /opt/conda && \
+    rm /tmp/miniconda.sh
+
+ENV PATH=/opt/conda/bin:$PATH
+ENV CONDA_DEFAULT_ENV=distill-v4
+
+# Copy conda environment
+COPY environment.yml /tmp/environment.yml
+RUN conda env create -f /tmp/environment.yml -p /opt/conda/envs/distill-v4
+
+# Activate environment
+ENV PATH=/opt/conda/envs/distill-v4/bin:$PATH
+ENV CONDA_DEFAULT_ENV=distill-v4
+ENV CONDA_PREFIX=/opt/conda/envs/distill-v4
+
+# Set up Python
+RUN conda run -n distill-v4 python -m ipykernel install --user --name distill-v4 --display-name "Distill-V4"
+
+# Working directory
+WORKDIR /workspace
+
+# Default command
+CMD ["/bin/bash"]

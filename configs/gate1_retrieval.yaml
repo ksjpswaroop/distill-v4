@@ -1,0 +1,39 @@
+# Gate 1: Knowledge Retrieval Training Config
+# 2B params, 8x A100
+
+model:
+  hidden_dim: 4096
+  memory_size: 100_000
+  num_heads: 16
+  key_dim: 256
+  retrieve_top_k: 32
+
+training:
+  num_epochs: 2
+  learning_rate: 5e-5
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  gradient_clip: 1.0
+
+  # Retrieval-specific
+  contrastive_margin: 0.5     # Contrastive loss margin for retrieval
+  memory_update_interval: 100  # Steps between memory updates
+  num_memory_updates: 10       # Number of entries to update per interval
+
+data:
+  retrieval_positive_ratio: 0.7   # Ratio of positive (relevant) pairs
+  retrieval_batch_size: 16         # Per GPU
+
+# Loss weights
+loss:
+  retrieval_loss_weight: 1.0
+  relevance_loss_weight: 0.5
+  fusion_loss_weight: 0.3
+
+deepspeed:
+  config_path: "./configs/deepspeed_zero2.json"
+  stage: 2
+
+hardware:
+  num_gpus: 4
+  max_batch_size_per_gpu: 4

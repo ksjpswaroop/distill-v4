@@ -1,0 +1,38 @@
+# Gate 2: FOL Symbolic Reasoning Training Config
+# 4B params, 8x A100
+
+model:
+  hidden_dim: 4096
+  intermediate_dim: 16384
+  num_reasoning_steps: 8
+  num_rewrite_rules: 32
+
+training:
+  num_epochs: 3
+  learning_rate: 3e-5
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  gradient_clip: 1.0
+
+  # FOL-specific
+  proof_validity_threshold: 0.5  # Min proof validity to accept
+  entailment_loss_weight: 0.5    # For natural logic entailment loss
+
+data:
+  fol_dataset_path: "./data/splits/fol_train.jsonl"
+  proof_dataset_path: "./data/splits/proof_train.jsonl"
+
+# Loss weights
+loss:
+  fol_loss_weight: 1.0
+  proof_validity_loss_weight: 0.8
+  entailment_loss_weight: 0.5
+  chain_continuity_loss_weight: 0.3
+
+deepspeed:
+  config_path: "./configs/deepspeed_zero3.json"
+  stage: 3  # Full ZeRO-3 for 4B gate
+
+hardware:
+  num_gpus: 8
+  max_batch_size_per_gpu: 2  # 4B gate is memory-heavy
