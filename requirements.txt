@@ -1,0 +1,42 @@
+# Distill-V4 Requirements
+
+# Core
+torch>=2.1.0
+transformers>=4.40.0
+huggingface_hub>=0.21.0
+accelerate>=0.28.0
+safetensors>=0.4.0
+
+# Data processing
+datasets>=2.18.0
+pandas>=2.2.0
+numpy>=1.26.0
+pyyaml>=6.0
+
+# Fine-tuning
+peft>=0.10.0  # LoRA support
+trl>=0.8.0   # RLHF/PPO support
+
+# Code execution/sandboxing
+docker>=7.0.0  # For code execution sandbox
+gvisor>=2024.0.0  # Alternative sandbox
+
+# Evaluation
+scikit-learn>=1.4.0
+tqdm>=4.66.0
+
+# Formal verification (optional)
+lean-dojo>=4.0.0  # Lean theorem prover interface
+coq-of-ocaml>=0.8.0  # Coq proof checker
+
+# Memory/retrieval
+faiss-cpu>=1.8.0  # Fast similarity search
+langdetect>=1.0.9  # Language detection
+
+# Logging
+wandb>=0.17.0  # Experiment tracking
+tensorboard>=2.16.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.31.0

@@ -1,0 +1,95 @@
+# Example configuration - copy to config.yaml and modify
+
+# Project paths
+project_root: /Users/swaroop/projects/distill-v4
+
+# Seed model
+seed_model:
+  name: Qwen/Qwen2.5-Coder-7B-Instruct
+  torch_dtype: bfloat16
+  device_map: auto
+
+# Data paths
+data:
+  raw: data/raw
+  processed: data/processed
+  sft_train: data/sft/train.jsonl
+  sft_val: data/sft/val.jsonl
+  rl: data/rl
+  eval: data/eval
+
+# Checkpoint paths
+checkpoints:
+  base: checkpoints/base
+  sft: checkpoints/sft
+  gate1: checkpoints/gate1_knowledge_retrieval
+  gate2: checkpoints/gate2_symbolic_reasoning
+  gate3: checkpoints/gate3_rl
+  gate4: checkpoints/gate4_verification
+  final: checkpoints/final
+
+# Training config
+training:
+  # SFT
+  sft:
+    num_train_epochs: 3
+    per_device_batch_size: 1
+    gradient_accumulation_steps: 16
+    learning_rate: 1e-5
+    warmup_ratio: 0.1
+    weight_decay: 0.01
+    max_grad_norm: 1.0
+    max_seq_length: 8192
+    
+  # Gate training
+  gates:
+    learning_rate: 5e-6
+    num_epochs: 5
+    batch_size: 2
+    
+  # RL
+  rl:
+    num_epochs: 10
+    num_generations_per_prompt: 8  # GRPO group size
+    learning_rate: 1e-6
+    entropy_coef: 0.01
+    clip_epsilon: 0.2
+
+# Model config
+model:
+  hidden_dim: 4096
+  num_layers: 32
+  num_heads: 32
+  expansion_factor: 4  # FFN dimension = hidden * expansion
+  
+  # Gate parameters
+  gate1_params: 2_000_000_000  # 2B
+  gate2_params: 4_000_000_000  # 4B
+  gate3_params: 1_000_000_000  # 1B
+  gate4_params: 3_000_000_000  # 3B
+  
+  # Target: 30B total
+  target_params: 30_000_000_000
+
+# Inference
+inference:
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+  max_new_tokens: 4096
+  verification_threshold: 0.5
+  self_correction_max_attempts: 3
+
+# Evaluation
+eval:
+  benchmarks:
+    - humaneval
+    - mbpp
+    - math
+    - arc_challenge
+  num_samples: 100
+  temperature: 0.2
+
+# API keys (set via environment)
+deepseek_api_key: ${DEEPSEEK_API_KEY}
+anthropic_api_key: ${ANTHROPIC_API_KEY}
